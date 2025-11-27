@@ -27,20 +27,20 @@ export function getAverageCalories(records: DailyRecord[], days: number = 7): nu
   return Math.round(total / recent.length)
 }
 
-export function getWorkoutStreak(records: DailyRecord[]): number {
-  let streak = 0
-  const sorted = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+// export function getWorkoutStreak(records: DailyRecord[]): number {
+//   let streak = 0
+//   const sorted = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-  for (const record of sorted) {
-    if (record.strengthTraining || record.cardio) {
-      streak++
-    } else {
-      break
-    }
-  }
+//   for (const record of sorted) {
+//     if (record.strengthTraining || record.cardio) {
+//       streak++
+//     } else {
+//       break
+//     }
+//   }
 
-  return streak
-}
+//   return streak
+// }
 
 export function getWeeklyWorkouts(records: DailyRecord[]): number {
   const oneWeekAgo = new Date()
@@ -48,6 +48,6 @@ export function getWeeklyWorkouts(records: DailyRecord[]): number {
 
   return records.filter(r => {
     const recordDate = new Date(r.date)
-    return recordDate >= oneWeekAgo && r.strengthTraining
+    return recordDate >= oneWeekAgo && r.strengthTraining 
   }).length
 }
