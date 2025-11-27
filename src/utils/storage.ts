@@ -1,16 +1,44 @@
-import { FitnessData } from '../types'
+import { FitnessData, MetricRecord } from '../types'
 
-const STORAGE_KEY = 'fitness_tracker_data'
+const API_URL = '/api/records'
 
-export function loadData(): FitnessData {
+// Fetch all records from MongoDB
+export async function loadData(): Promise<FitnessData> {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : { records: [] }
-  } catch {
+    const response = await fetch(API_URL)
+    if (!response.ok) throw new Error('Failed to fetch records')
+    const records = await response.json()
+    return { records }
+  } catch (error) {
+    console.error('Error loading data:', error)
     return { records: [] }
   }
 }
 
-export function saveData(data: FitnessData): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+// Save a new record to MongoDB
+export async function saveRecord(record: MetricRecord): Promise<void> {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+    })
+    if (!response.ok) throw new Error('Failed to save record')
+  } catch (error) {
+    console.error('Error saving record:', error)
+    throw error
+  }
+}
+
+// Delete a record from MongoDB
+export async function deleteRecord(id: string): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}?id=${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) throw new Error('Failed to delete record')
+  } catch (error) {
+    console.error('Error deleting record:', error)
+    throw error
+  }
 }

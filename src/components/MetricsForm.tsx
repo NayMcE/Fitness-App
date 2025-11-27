@@ -3,7 +3,7 @@ import { DailyRecord } from '../types'
 import { X } from 'lucide-react'
 
 interface MetricsFormProps {
-  onSubmit: (record: DailyRecord) => void
+  onSubmit: (record: DailyRecord) => Promise<void>
   onCancel: () => void
 }
 
@@ -24,13 +24,17 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
     notes: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.weight <= 0 || formData.calories < 0) {
       alert('Please enter valid values')
       return
     }
-    onSubmit(formData as DailyRecord)
+    const record: DailyRecord = {
+      ...formData,
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }
+    await onSubmit(record)
     setFormData({
       date: today,
       calories: 0,
