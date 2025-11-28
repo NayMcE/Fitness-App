@@ -5,7 +5,7 @@ import { MetricRecord } from '../../src/types';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const client = await clientPromise;
-    const db = client.db('fitness-tracker');
+    const db = client.db('cluster0');
     const collection = db.collection('records');
 
     // GET - Fetch all records

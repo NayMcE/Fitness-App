@@ -26,7 +26,7 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (formData.weight <= 0 || formData.calories < 0) {
+    if ( formData.calories < 0) {
       alert('Please enter valid values')
       return
     }
