@@ -1,11 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import clientPromise from '../lib/mongodb';
+import clientPromise from '../lib/mongodb.ts';
 import { MetricRecord } from '../../src/types';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const client = await clientPromise;
-    const db = client.db('cluster0');
+    const db = client.db('fitness-tracker');
     const collection = db.collection('records');
 
     // GET - Fetch all records
@@ -34,7 +34,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Method not allowed
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
-    console.error('API Error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('API Error:', errorMessage);
+    return res.status(500).json({ error: errorMessage });
   }
 }
