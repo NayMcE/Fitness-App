@@ -3,6 +3,17 @@ import clientPromise from '../lib/mongodb.ts';
 import { MetricRecord } from '../../src/types';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   try {
     const client = await clientPromise;
     const db = client.db('fitness-tracker');
@@ -10,8 +21,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // GET - Fetch all records
     if (req.method === 'GET') {
-      const records = await collection.find({}).sort({ date: -1 }).toArray();
-      return res.status(200).json(records);
+      try {
+        const records = await collection.find({}).sort({ date: -1 }).toArray();
+        return res.status(200).json(records || []);
+      } catch (err) {
+        console.error('GET Error:', err);
+        throw err;
+      }
     }
 
     // POST - Add a new record
@@ -35,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('API Error:', errorMessage);
+    console.error('API Error:', errorMessage, error);
     return res.status(500).json({ error: errorMessage });
   }
 }
