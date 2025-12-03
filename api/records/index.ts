@@ -4,6 +4,8 @@ import { MetricRecord } from '../../src/types';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('API called with method:', req.method);
+  console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
   
   try {
     console.log('Connecting to MongoDB...');
@@ -53,7 +55,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('API Error:', errorMessage, error);
-    return res.status(500).json({ error: errorMessage, stack: error instanceof Error ? error.stack : undefined });
+    console.error('API Error Details:', {
+      message: errorMessage,
+      name: error instanceof Error ? error.name : 'Unknown',
+      mongoUri: process.env.MONGODB_URI ? 'SET' : 'NOT SET'
+    });
+    return res.status(500).json({ 
+      error: errorMessage,
+      mongoUriSet: !!process.env.MONGODB_URI
+    });
   }
 }
