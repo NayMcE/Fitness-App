@@ -3,33 +3,26 @@ import { Activity, Plus } from 'lucide-react'
 import Dashboard from './components/Dashboard'
 import MetricsForm from './components/MetricsForm'
 import { FitnessData, DailyRecord } from './types'
-import { loadData, saveRecord } from './utils/storage'
+import { loadData, saveData } from './utils/storage'
 
 export default function App() {
   const [data, setData] = useState<FitnessData>({ records: [] })
   const [showForm, setShowForm] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-      const loaded = await loadData()
-      setData(loaded)
-      setIsLoading(false)
-    }
-    fetchData()
+    const loaded = loadData()
+    setData(loaded)
   }, [])
 
-  const addRecord = async (record: DailyRecord) => {
-    try {
-      await saveRecord(record)
-      setData(prev => ({
-        records: [record, ...prev.records]
-      }))
-      setShowForm(false)
-    } catch (error) {
-      alert('Failed to save record. Please try again.')
-    }
+  useEffect(() => {
+    saveData(data)
+  }, [data])
+
+  const addRecord = (record: DailyRecord) => {
+    setData(prev => ({
+      records: [record, ...prev.records]
+    }))
+    setShowForm(false)
   }
 
   return (
@@ -58,13 +51,7 @@ export default function App() {
             <MetricsForm onSubmit={addRecord} onCancel={() => setShowForm(false)} />
           </div>
         )}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="text-gray-600">Loading your fitness data...</div>
-          </div>
-        ) : (
-          <Dashboard data={data} />
-        )}
+        <Dashboard data={data} />
       </main>
     </div>
   )

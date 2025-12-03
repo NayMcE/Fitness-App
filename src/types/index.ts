@@ -1,5 +1,4 @@
 export interface DailyRecord {
-  id: string
   date: string
   calories: number
   strengthTraining: boolean
@@ -17,5 +16,3 @@ export interface DailyRecord {
 export interface FitnessData {
   records: DailyRecord[]
 }
-
-export type MetricRecord = DailyRecord
