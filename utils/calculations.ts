@@ -51,3 +51,21 @@ export function getWeeklyWorkouts(records: DailyRecord[]): number {
     return recordDate >= oneWeekAgo && r.strengthTraining 
   }).length
 }
+
+export function getWeeklyCreatineDays(records: DailyRecord[]): number {
+  // Get Monday of the current week
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  const monday = new Date(today)
+  const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+  monday.setDate(today.getDate() - daysFromMonday)
+  
+  // Set time to start of day for comparison
+  monday.setHours(0, 0, 0, 0)
+
+  // Filter records from Monday to today where creatine was taken
+  return records.filter(r => {
+    const recordDate = new Date(r.date)
+    return recordDate >= monday && recordDate <= today && r.creatine
+  }).length
+}

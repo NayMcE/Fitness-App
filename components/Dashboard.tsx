@@ -2,7 +2,7 @@
 
 import { TrendingDown, Flame, Calendar, Pill } from 'lucide-react'
 import { FitnessData, DailyRecord } from '@/types'
-import { getWeightTrend, getAverageCalories, getWeeklyWorkouts } from '@/utils/calculations'
+import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatineDays } from '@/utils/calculations'
 import StatCard from './StatCard'
 import WeightChart from './WeightChart'
 import CaloriesChart from './CaloriesChart'
@@ -20,7 +20,7 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
   const weightTrend = getWeightTrend(records)
   const avgCalories = getAverageCalories(records)
   const weeklyWorkouts = getWeeklyWorkouts(records)
-  const creatineDays = records.filter(record => record.creatine).length
+  const creatineDays = getWeeklyCreatineDays(records)
 
   const handleEdit = (record: DailyRecord) => {
     if (onEditRecord) {
