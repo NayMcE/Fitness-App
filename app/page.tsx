@@ -10,6 +10,7 @@ import { loadData, saveData } from '@/utils/storage'
 export default function Page() {
   const [data, setData] = useState<FitnessData>({ records: [] })
   const [showForm, setShowForm] = useState(false)
+  const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
 
   useEffect(() => {
     const loaded = loadData()
@@ -21,10 +22,29 @@ export default function Page() {
   }, [data])
 
   const addRecord = (record: DailyRecord) => {
-    setData(prev => ({
-      records: [record, ...prev.records]
-    }))
+    if (editingRecord) {
+      // Update existing record
+      setData(prev => ({
+        records: prev.records.map(r => r.date === editingRecord.date ? record : r)
+      }))
+      setEditingRecord(null)
+    } else {
+      // Add new record
+      setData(prev => ({
+        records: [record, ...prev.records]
+      }))
+    }
     setShowForm(false)
+  }
+
+  const handleEditRecord = (record: DailyRecord) => {
+    setEditingRecord(record)
+    setShowForm(true)
+  }
+
+  const handleCloseForm = () => {
+    setShowForm(false)
+    setEditingRecord(null)
   }
 
   return (
@@ -37,7 +57,10 @@ export default function Page() {
               <h1 className="text-3xl font-bold text-gray-900">Macci Fit Tracker</h1>
             </div>
             <button
-              onClick={() => setShowForm(!showForm)}
+              onClick={() => {
+                setEditingRecord(null)
+                setShowForm(!showForm)
+              }}
               className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
             >
               <Plus className="w-5 h-5" />
@@ -50,10 +73,17 @@ export default function Page() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {showForm && (
           <div className="mb-8">
-            <MetricsForm onSubmit={addRecord} onCancel={() => setShowForm(false)} />
+            <MetricsForm 
+              onSubmit={addRecord} 
+              onCancel={handleCloseForm}
+              editingRecord={editingRecord}
+            />
           </div>
         )}
-        <Dashboard data={data} />
+        <Dashboard 
+          data={data}
+          onEditRecord={handleEditRecord}
+        />
       </main>
     </div>
   )

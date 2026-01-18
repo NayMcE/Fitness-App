@@ -1,9 +1,28 @@
 'use client'
 
+import { useState } from 'react'
 import { DailyRecord } from '@/types'
-import { CheckCircle, Circle } from 'lucide-react'
+import { CheckCircle, Circle, Edit2, Trash2 } from 'lucide-react'
 
-export default function RecentRecords({ records }: { records: DailyRecord[] }) {
+interface RecentRecordsProps {
+  records: DailyRecord[]
+  onEdit: (record: DailyRecord) => void
+  onDelete: (date: string) => void
+}
+
+export default function RecentRecords({ records, onEdit, onDelete }: RecentRecordsProps) {
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const handleDelete = async (record: DailyRecord) => {
+    if (!window.confirm(`Delete entry for ${record.date}?`)) return
+    setDeletingId(record.date)
+    try {
+      await onDelete(record.date)
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <h2 className="text-lg font-bold text-gray-900 mb-4">Recent Logs</h2>
@@ -23,6 +42,23 @@ export default function RecentRecords({ records }: { records: DailyRecord[] }) {
                     {record.calories} cal • {record.weight} lbs {record.strengthTraining && `• ${record.workoutMinutes}min workout`}
                   </p>
                 </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => onEdit(record)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                  title="Edit entry"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(record)}
+                  disabled={deletingId === record.date}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+                  title="Delete entry"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
           ))}

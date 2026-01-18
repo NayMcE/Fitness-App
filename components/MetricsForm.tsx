@@ -1,15 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DailyRecord } from '@/types'
 import { X } from 'lucide-react'
 
 interface MetricsFormProps {
   onSubmit: (record: DailyRecord) => void
   onCancel: () => void
+  editingRecord?: DailyRecord | null
 }
 
-export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
+export default function MetricsForm({ onSubmit, onCancel, editingRecord }: MetricsFormProps) {
   const today = new Date().toISOString().split('T')[0]
   const [formData, setFormData] = useState({
     date: today,
@@ -26,6 +27,27 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
     notes: ''
   })
 
+  useEffect(() => {
+    if (editingRecord) {
+      setFormData(editingRecord)
+    } else {
+      setFormData({
+        date: today,
+        calories: 0,
+        strengthTraining: false,
+        cardio: false,
+        workoutMinutes: 0,
+        weight: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        creatine: false,
+        stepCount: 0,
+        notes: ''
+      })
+    }
+  }, [editingRecord, today])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.weight <= 0 || formData.calories < 0) {
@@ -33,6 +55,9 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
       return
     }
     onSubmit(formData as DailyRecord)
+  }
+
+  const handleCancel = () => {
     setFormData({
       date: today,
       calories: 0,
@@ -47,13 +72,16 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
       stepCount: 0,
       notes: ''
     })
+    onCancel()
   }
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Log Today's Metrics</h2>
-        <button onClick={onCancel} className="text-gray-400 hover:text-gray-600">
+        <h2 className="text-xl font-bold text-gray-900">
+          {editingRecord ? `Edit Metrics - ${editingRecord.date}` : "Log Today's Metrics"}
+        </h2>
+        <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -198,7 +226,7 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
         <div className="flex gap-3 justify-end">
           <button
             type="button"
-            onClick={onCancel}
+            onClick={handleCancel}
             className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
           >
             Cancel
@@ -207,7 +235,7 @@ export default function MetricsForm({ onSubmit, onCancel }: MetricsFormProps) {
             type="submit"
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
-            Save Metrics
+            {editingRecord ? 'Update Metrics' : 'Save Metrics'}
           </button>
         </div>
       </form>
