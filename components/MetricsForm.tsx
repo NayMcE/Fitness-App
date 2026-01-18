@@ -12,7 +12,7 @@ interface MetricsFormProps {
 
 export default function MetricsForm({ onSubmit, onCancel, editingRecord }: MetricsFormProps) {
   const today = new Date().toISOString().split('T')[0]
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<DailyRecord>({
     date: today,
     calories: 0,
     strengthTraining: false,
@@ -54,7 +54,12 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
       alert('Please enter valid values')
       return
     }
-    onSubmit(formData as DailyRecord)
+    // Preserve _id if editing
+    const recordToSubmit = {
+      ...formData,
+      _id: editingRecord?._id
+    } as DailyRecord
+    onSubmit(recordToSubmit)
   }
 
   const handleCancel = () => {

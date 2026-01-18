@@ -11,15 +11,21 @@ export default function Page() {
   const [data, setData] = useState<FitnessData>({ records: [] })
   const [showForm, setShowForm] = useState(false)
   const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
 
+  // Load data from localStorage on mount
   useEffect(() => {
     const loaded = loadData()
     setData(loaded)
+    setIsLoaded(true)
   }, [])
 
+  // Save data to localStorage whenever it changes
   useEffect(() => {
-    saveData(data)
-  }, [data])
+    if (isLoaded) {
+      saveData(data)
+    }
+  }, [data, isLoaded])
 
   const addRecord = (record: DailyRecord) => {
     if (editingRecord) {
@@ -42,9 +48,23 @@ export default function Page() {
     setShowForm(true)
   }
 
+  const handleDeleteRecord = (date: string) => {
+    setData(prev => ({
+      records: prev.records.filter(r => r.date !== date)
+    }))
+  }
+
   const handleCloseForm = () => {
     setShowForm(false)
     setEditingRecord(null)
+  }
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    )
   }
 
   return (
@@ -83,6 +103,7 @@ export default function Page() {
         <Dashboard 
           data={data}
           onEditRecord={handleEditRecord}
+          onDeleteRecord={handleDeleteRecord}
         />
       </main>
     </div>

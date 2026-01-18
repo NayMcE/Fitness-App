@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { TrendingDown, Flame, Calendar, Pill } from 'lucide-react'
 import { FitnessData, DailyRecord } from '@/types'
 import { getWeightTrend, getAverageCalories, getWeeklyWorkouts } from '@/utils/calculations'
@@ -12,10 +11,11 @@ import RecentRecords from './RecentRecords'
 interface DashboardProps {
   data: FitnessData
   onEditRecord?: (record: DailyRecord) => void
+  onDeleteRecord?: (date: string) => void
 }
 
-export default function Dashboard({ data, onEditRecord }: DashboardProps) {
-  const [records, setRecords] = useState(data.records)
+export default function Dashboard({ data, onEditRecord, onDeleteRecord }: DashboardProps) {
+  const records = data.records
 
   const weightTrend = getWeightTrend(records)
   const avgCalories = getAverageCalories(records)
@@ -28,20 +28,9 @@ export default function Dashboard({ data, onEditRecord }: DashboardProps) {
     }
   }
 
-  const handleDeleteRecord = async (date: string) => {
-    try {
-      const recordToDelete = records.find(r => r.date === date)
-      if (!recordToDelete?._id) return
-
-      const response = await fetch(`/api/records?id=${recordToDelete._id}`, {
-        method: 'DELETE',
-      })
-
-      if (response.ok) {
-        setRecords(records.filter(r => r.date !== date))
-      }
-    } catch (error) {
-      console.error('Failed to delete record:', error)
+  const handleDeleteRecord = (date: string) => {
+    if (onDeleteRecord) {
+      onDeleteRecord(date)
     }
   }
 
@@ -57,7 +46,7 @@ export default function Dashboard({ data, onEditRecord }: DashboardProps) {
         />
         <StatCard
           icon={Flame}
-          label="Avg Calories (7d)"
+          label="Avg Calories (This Week)"
           value={avgCalories.toString()}
           change={0}
           trend="stable"
