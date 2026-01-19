@@ -10,7 +10,7 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Weight Trend (Last 30 Days)</h2>
+      <h2 className="text-lg font-bold text-gray-900 mb-4">Weight Trend (Last 7 Days)</h2>
       {data.length > 0 ? (
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>

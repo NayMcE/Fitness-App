@@ -7,6 +7,7 @@ import MetricsForm from '@/components/MetricsForm'
 import { FitnessData, DailyRecord } from '@/types'
 import { loadData, saveData } from '@/utils/storage'
 
+// Fitness tracker application
 export default function Page() {
   const [data, setData] = useState<FitnessData>({ records: [] })
   const [showForm, setShowForm] = useState(false)
