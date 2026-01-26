@@ -1,8 +1,8 @@
 'use client'
 
-import { TrendingDown, Flame, Calendar, Pill } from 'lucide-react'
+import { TrendingDown, Flame, Calendar, Pill, Target } from 'lucide-react'
 import { FitnessData, DailyRecord } from '@/types'
-import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatineDays } from '@/utils/calculations'
+import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatineDays, getWeeklyCalories } from '@/utils/calculations'
 import StatCard from './StatCard'
 import WeightChart from './WeightChart'
 import CaloriesChart from './CaloriesChart'
@@ -21,6 +21,8 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
   const avgCalories = getAverageCalories(records)
   const weeklyWorkouts = getWeeklyWorkouts(records)
   const creatineDays = getWeeklyCreatineDays(records)
+  const weeklyCalories = getWeeklyCalories(records)
+  const weeklyCalorieGoal = 14700 // 2000 cal/day × 7 days
 
   const handleEdit = (record: DailyRecord) => {
     if (onEditRecord) {
@@ -36,7 +38,7 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           icon={TrendingDown}
           label="Current Weight"
@@ -48,6 +50,13 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
           icon={Flame}
           label="Avg Calories (This Week)"
           value={avgCalories.toString()}
+          change={0}
+          trend="stable"
+        />
+        <StatCard
+          icon={Target}
+          label="Weekly Calories"
+          value={`${weeklyCalories} / ${weeklyCalorieGoal}`}
           change={0}
           trend="stable"
         />
