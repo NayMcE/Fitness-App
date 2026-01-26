@@ -25,7 +25,7 @@ export default function CaloriesChart({ records }: { records: DailyRecord[] }) {
                 stroke="#f59e0b" 
                 strokeWidth={2}
                 dot={{ fill: '#f59e0b', r: 5 }}
-                label={{ position: 'top', formatter: (value) => `${value}`, fill: '#374151', fontSize: 12 }}
+                label={{ position: 'top', formatter: (value: number) => `${value}`, fill: '#374151', fontSize: 12 }}
               />
             </LineChart>
           </ResponsiveContainer>
