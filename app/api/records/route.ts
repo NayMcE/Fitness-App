@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
       const record = await prisma.dailyRecord.findUnique({
         where: { date },
       });
-      return NextResponse.json(record || { message: 'No record found' });
+      if (record) {
+        return NextResponse.json(record);
+      }
+      return NextResponse.json({ message: 'No record found' });
     }
 
     const records = await prisma.dailyRecord.findMany({
