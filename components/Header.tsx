@@ -33,7 +33,7 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
     <header className="bg-brand-dark shadow w-full">
       <Link href="/" className="flex items-center hover:opacity-80 transition w-full">
         <Image 
-          src="/Macci (2).png" 
+          src="/Macci (3).png" 
           alt="Macci Fit Tracker Logo" 
           width={200} 
           height={80}
