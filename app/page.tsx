@@ -12,7 +12,7 @@ import { loadData, saveData } from '@/utils/storage'
 export default function Page() {
   const [data, setData] = useState<FitnessData>({ 
     records: [], 
-    targets: { calorieTarget: 2000, stepsTarget: 10000 } 
+    targets: { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 } 
   })
   const [showForm, setShowForm] = useState(false)
   const [showTargets, setShowTargets] = useState(false)
@@ -102,7 +102,7 @@ export default function Page() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {showTargets && (
           <TargetsSettings 
-            targets={data.targets || { calorieTarget: 2000, stepsTarget: 10000 }}
+            targets={data.targets || { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 }}
             onSave={handleSaveTargets}
             onCancel={() => setShowTargets(false)}
           />
