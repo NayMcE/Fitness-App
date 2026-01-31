@@ -1,0 +1,23 @@
+{
+  "name": "Macci Fit Tracker",
+  "short_name": "Fit Tracker",
+  "description": "Track your daily fitness metrics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e9edef",
+  "theme_color": "#0ac5a8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
