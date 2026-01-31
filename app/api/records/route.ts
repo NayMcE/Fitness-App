@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     console.log('POST /api/records - Received body:', body);
+    console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'NOT SET');
     
     if (!body) {
       return NextResponse.json(
@@ -78,8 +79,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('POST Error:', errorMessage);
+    console.error('Full error:', error);
     return NextResponse.json(
-      { error: errorMessage },
+      { error: errorMessage, details: String(error) },
       { status: 500 }
     );
   }

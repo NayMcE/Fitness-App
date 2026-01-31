@@ -90,6 +90,7 @@ export default function Page() {
         } else {
           const errorData = await response.json()
           console.error('API error:', errorData)
+          alert(`Failed to save: ${errorData.error}`)
         }
       }
       setShowForm(false)
