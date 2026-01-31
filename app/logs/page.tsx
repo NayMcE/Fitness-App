@@ -10,7 +10,7 @@ import Header from '@/components/Header'
 
 export default function LogsPage() {
   const [records, setRecords] = useState<DailyRecord[]>([])
-  const [targets, setTargets] = useState<DailyTargets>({ calorieTarget: 2000, stepsTarget: 10000 })
+  const [targets, setTargets] = useState<DailyTargets>({ calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 })
   const [showForm, setShowForm] = useState(false)
   const [showTargets, setShowTargets] = useState(false)
   const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
@@ -21,7 +21,7 @@ export default function LogsPage() {
   useEffect(() => {
     const data = loadData()
     setRecords(data.records)
-    setTargets(data.targets || { calorieTarget: 2000, stepsTarget: 10000 })
+    setTargets(data.targets || { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 })
     setIsLoaded(true)
   }, [])
 
