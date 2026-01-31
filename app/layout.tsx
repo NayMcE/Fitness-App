@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Track your daily fitness metrics',
   icons: {
     icon: '/favicon.svg',
-    apple: '/apple-touch-icon.png',
+    apple: '/Macci.png',
   },
   appleWebApp: {
     capable: true,
