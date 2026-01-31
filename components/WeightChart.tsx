@@ -32,12 +32,12 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-900">Weight Trend {getRangeLabel()}</h2>
-        <div className="flex gap-2">
+      <div className="mb-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Weight Trend {getRangeLabel()}</h2>
+        <div className="flex gap-3">
           <button
             onClick={() => setTimeRange('week')}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'week'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
@@ -47,7 +47,7 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
           </button>
           <button
             onClick={() => setTimeRange('month')}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'month'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
@@ -57,7 +57,7 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
           </button>
           <button
             onClick={() => setTimeRange('all')}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'all'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
