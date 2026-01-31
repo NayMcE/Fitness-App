@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DailyRecord } from '@/types';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    // All data is stored in browser localStorage
-    // This endpoint returns success to maintain API compatibility
-    return NextResponse.json({ message: 'Data stored in browser' });
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get('date');
+
+    if (date) {
+      const record = await prisma.dailyRecord.findUnique({
+        where: { date },
+      });
+      return NextResponse.json(record || { message: 'No record found' });
+    }
+
+    const records = await prisma.dailyRecord.findMany({
+      orderBy: { date: 'desc' },
+    });
+    return NextResponse.json(records);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('GET Error:', errorMessage);
@@ -27,13 +38,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Data is managed by the browser (localStorage)
-    // This endpoint returns success for API compatibility
-    const record: DailyRecord = body;
-    return NextResponse.json(
-      { ...record, success: true },
-      { status: 201 }
-    );
+    const record = await prisma.dailyRecord.create({
+      data: {
+        date: body.date,
+        calories: body.calories,
+        strengthTraining: body.strengthTraining,
+        cardio: body.cardio,
+        weight: body.weight,
+        protein: body.protein,
+        carbs: body.carbs,
+        fat: body.fat,
+        creatine: body.creatine,
+        stepCount: body.stepCount,
+        notes: body.notes || '',
+      },
+    });
+    
+    return NextResponse.json(record, { status: 201 });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('POST Error:', errorMessage);
@@ -56,8 +77,10 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Data is managed by the browser (localStorage)
-    // This endpoint returns success for API compatibility
+    await prisma.dailyRecord.delete({
+      where: { id },
+    });
+
     return NextResponse.json({ message: 'Record deleted', success: true });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -82,9 +105,24 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Data is managed by the browser (localStorage)
-    // This endpoint returns success for API compatibility
-    return NextResponse.json({ message: 'Record updated', success: true, ...body });
+    const record = await prisma.dailyRecord.update({
+      where: { id },
+      data: {
+        date: body.date,
+        calories: body.calories,
+        strengthTraining: body.strengthTraining,
+        cardio: body.cardio,
+        weight: body.weight,
+        protein: body.protein,
+        carbs: body.carbs,
+        fat: body.fat,
+        creatine: body.creatine,
+        stepCount: body.stepCount,
+        notes: body.notes || '',
+      },
+    });
+
+    return NextResponse.json(record);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('PUT Error:', errorMessage);

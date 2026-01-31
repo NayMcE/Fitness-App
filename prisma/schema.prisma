@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model DailyRecord {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  date            String    @unique
+  calories        Int
+  strengthTraining Boolean
+  cardio          Boolean
+  weight          Float
+  protein         Int
+  carbs           Int
+  fat             Int
+  creatine        Boolean
+  stepCount       Int
+  notes           String    @default("")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model DailyTargets {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  calorieTarget       Int
+  stepsTarget         Int
+  weeklyStepsTarget   Int
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
