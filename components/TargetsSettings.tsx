@@ -15,7 +15,7 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (formData.calorieTarget > 0 && formData.stepsTarget > 0) {
+    if (formData.calorieTarget > 0 && formData.stepsTarget > 0 && formData.weeklyStepsTarget > 0) {
       onSave(formData)
     } else {
       alert('Please enter valid target values')
@@ -25,7 +25,7 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Daily Targets</h2>
+        <h2 className="text-xl font-bold text-gray-900">Targets</h2>
         <button
           onClick={onCancel}
           className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition"
@@ -35,31 +35,52 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Daily Calorie Target
-            </label>
-            <input
-              type="number"
-              value={formData.calorieTarget}
-              onChange={(e) => setFormData({ ...formData, calorieTarget: parseInt(e.target.value) || 0 })}
-              placeholder="e.g., 2000"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Daily Targets</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Daily Calorie Target
+              </label>
+              <input
+                type="number"
+                value={formData.calorieTarget}
+                onChange={(e) => setFormData({ ...formData, calorieTarget: parseInt(e.target.value) || 0 })}
+                placeholder="e.g., 2000"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Daily Steps Target
-            </label>
-            <input
-              type="number"
-              value={formData.stepsTarget}
-              onChange={(e) => setFormData({ ...formData, stepsTarget: parseInt(e.target.value) || 0 })}
-              placeholder="e.g., 10000"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Daily Steps Target
+              </label>
+              <input
+                type="number"
+                value={formData.stepsTarget}
+                onChange={(e) => setFormData({ ...formData, stepsTarget: parseInt(e.target.value) || 0 })}
+                placeholder="e.g., 10000"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Targets</h3>
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Weekly Steps Target
+              </label>
+              <input
+                type="number"
+                value={formData.weeklyStepsTarget}
+                onChange={(e) => setFormData({ ...formData, weeklyStepsTarget: parseInt(e.target.value) || 0 })}
+                placeholder="e.g., 70000"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
           </div>
         </div>
 
@@ -82,3 +103,4 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
     </div>
   )
 }
+

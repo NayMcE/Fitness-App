@@ -1,8 +1,8 @@
 'use client'
 
-import { TrendingDown, Flame, Calendar, Pill, Target } from 'lucide-react'
+import { TrendingDown, Flame, Calendar, Pill, Target, Footprints } from 'lucide-react'
 import { FitnessData, DailyRecord } from '@/types'
-import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatineDays, getWeeklyCalories } from '@/utils/calculations'
+import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatineDays, getWeeklyCalories, getWeeklySteps } from '@/utils/calculations'
 import StatCard from './StatCard'
 import WeightChart from './WeightChart'
 import CaloriesChart from './CaloriesChart'
@@ -21,7 +21,9 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
   const weeklyWorkouts = getWeeklyWorkouts(records)
   const creatineDays = getWeeklyCreatineDays(records)
   const weeklyCalories = getWeeklyCalories(records)
+  const weeklySteps = getWeeklySteps(records)
   const weeklyCalorieGoal = 14700 // 2000 cal/day × 7 days
+  const weeklyStepsGoal = data.targets?.weeklyStepsTarget || 70000 // 10000 steps/day × 7 days
 
   const handleEdit = (record: DailyRecord) => {
     if (onEditRecord) {
@@ -70,6 +72,13 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
           icon={Calendar}
           label="Workouts This Week"
           value={weeklyWorkouts.toString()}
+          change={0}
+          trend="stable"
+        />
+        <StatCard
+          icon={Footprints}
+          label="Weekly Steps"
+          value={`${weeklySteps} / ${weeklyStepsGoal}`}
           change={0}
           trend="stable"
         />

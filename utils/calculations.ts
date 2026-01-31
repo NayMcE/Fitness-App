@@ -90,3 +90,16 @@ export function getWeeklyCalories(records: DailyRecord[]): number {
 
   return weekRecords.reduce((sum, r) => sum + r.calories, 0)
 }
+
+export function getWeeklySteps(records: DailyRecord[]): number {
+  const monday = getMondayOfWeek()
+  const today = new Date()
+
+  // Filter records from Monday to today and sum steps
+  const weekRecords = records.filter(r => {
+    const recordDate = new Date(r.date)
+    return recordDate >= monday && recordDate <= today
+  })
+
+  return weekRecords.reduce((sum, r) => sum + r.stepCount, 0)
+}

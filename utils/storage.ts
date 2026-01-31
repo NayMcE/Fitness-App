@@ -9,12 +9,15 @@ export function loadData(): FitnessData {
     
     // Ensure targets are always present
     if (!data.targets) {
-      data.targets = { calorieTarget: 2000, stepsTarget: 10000 }
+      data.targets = { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 }
+    } else if (!data.targets.weeklyStepsTarget) {
+      // Add weeklyStepsTarget if it's missing from existing targets
+      data.targets.weeklyStepsTarget = 70000
     }
     
     return data
   } catch {
-    return { records: [], targets: { calorieTarget: 2000, stepsTarget: 10000 } }
+    return { records: [], targets: { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 } }
   }
 }
 
