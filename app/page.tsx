@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Activity, Plus, Settings } from 'lucide-react'
+import { Activity, Plus, Settings, FileText } from 'lucide-react'
+import Link from 'next/link'
 import Dashboard from '@/components/Dashboard'
 import MetricsForm from '@/components/MetricsForm'
 import TargetsSettings from '@/components/TargetsSettings'
@@ -89,11 +90,19 @@ export default function Page() {
       <header className="bg-white shadow">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition">
               <Activity className="w-8 h-8 text-indigo-600" />
               <h1 className="text-3xl font-bold text-gray-900">Macci Fit Tracker</h1>
-            </div>
+            </Link>
             <div className="flex items-center gap-2">
+              <Link
+                href="/logs"
+                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                title="View all logs"
+              >
+                <FileText className="w-5 h-5" />
+                Logs
+              </Link>
               <button
                 onClick={() => {
                   setShowForm(false)

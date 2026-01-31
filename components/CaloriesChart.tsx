@@ -13,6 +13,13 @@ export default function CaloriesChart({ records }: { records: DailyRecord[] }) {
     return monday.toISOString().split('T')[0]
   }
 
+  // Format date to British format (DD/MM/YY)
+  const formatBritishDate = (dateString: string): string => {
+    const [year, month, day] = dateString.split('-')
+    const yy = year.slice(-2)
+    return `${day}/${month}/${yy}`
+  }
+
   const weeklyData: { [key: string]: number } = {}
   records.forEach(record => {
     const recordDate = new Date(record.date)
@@ -23,7 +30,7 @@ export default function CaloriesChart({ records }: { records: DailyRecord[] }) {
   // Convert to array and sort by week
   const data = Object.entries(weeklyData)
     .map(([week, calories]) => ({
-      week: `Week of ${week}`,
+      week: `Week of ${formatBritishDate(week)}`,
       calories
     }))
     .sort((a, b) => a.week.localeCompare(b.week))

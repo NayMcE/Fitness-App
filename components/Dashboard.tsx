@@ -6,7 +6,6 @@ import { getWeightTrend, getAverageCalories, getWeeklyWorkouts, getWeeklyCreatin
 import StatCard from './StatCard'
 import WeightChart from './WeightChart'
 import CaloriesChart from './CaloriesChart'
-import RecentRecords from './RecentRecords'
 
 interface DashboardProps {
   data: FitnessData
@@ -80,14 +79,6 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
         <WeightChart records={records} />
         <CaloriesChart records={records} />
       </div>
-
-      <RecentRecords 
-        records={records.slice(0, 10)} 
-        onEdit={handleEdit}
-        onDelete={handleDeleteRecord}
-        calorieTarget={data.targets?.calorieTarget || 2000}
-        stepsTarget={data.targets?.stepsTarget || 10000}
-      />
     </div>
   )
 }
