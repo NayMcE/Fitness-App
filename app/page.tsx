@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Activity, Plus, Settings, FileText } from 'lucide-react'
-import Link from 'next/link'
 import Dashboard from '@/components/Dashboard'
 import MetricsForm from '@/components/MetricsForm'
 import TargetsSettings from '@/components/TargetsSettings'
+import Header from '@/components/Header'
 import { FitnessData, DailyRecord, DailyTargets } from '@/types'
 import { loadData, saveData } from '@/utils/storage'
 
@@ -87,47 +86,18 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <header className="bg-white shadow">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition">
-              <Activity className="w-8 h-8 text-indigo-600" />
-              <h1 className="text-3xl font-bold text-gray-900">Macci Fit Tracker</h1>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Link
-                href="/logs"
-                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-                title="View all logs"
-              >
-                <FileText className="w-5 h-5" />
-                Logs
-              </Link>
-              <button
-                onClick={() => {
-                  setShowForm(false)
-                  setShowTargets(!showTargets)
-                }}
-                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-                title="Settings"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => {
-                  setEditingRecord(null)
-                  setShowTargets(false)
-                  setShowForm(!showForm)
-                }}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-              >
-                <Plus className="w-5 h-5" />
-                Log Metrics
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header
+        onLogsClick={() => {}}
+        onSettingsClick={() => {
+          setShowForm(false)
+          setShowTargets(!showTargets)
+        }}
+        onLogMetricsClick={() => {
+          setEditingRecord(null)
+          setShowTargets(false)
+          setShowForm(!showForm)
+        }}
+      />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         {showTargets && (
