@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-brand-teal: #0ac5a8;
+  --color-brand-dark: #2c3d5b;
+  --color-brand-slate: #879cb9;
+  --color-brand-light: #e9edef;
+}
+
+body {
+  background-color: var(--color-brand-light);
+}

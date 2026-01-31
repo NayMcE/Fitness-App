@@ -78,12 +78,12 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-6 border-t-4 border-brand-teal">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-brand-dark">
           {editingRecord ? `Edit Metrics - ${editingRecord.date}` : "Log Today's Metrics"}
         </h2>
-        <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
+        <button onClick={handleCancel} className="text-brand-slate hover:text-brand-dark">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -91,79 +91,79 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Date</label>
             <input
               type="date"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Weight (lbs)</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Weight (lbs)</label>
             <input
               type="number"
               step="0.1"
               value={formData.weight || ''}
               onChange={(e) => setFormData({ ...formData, weight: parseFloat(e.target.value) || 0 })}
               placeholder="e.g., 180.5"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Calories</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Calories</label>
             <input
               type="number"
               value={formData.calories || ''}
               onChange={(e) => setFormData({ ...formData, calories: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 2000"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
            <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Protein</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Protein</label>
             <input
               type="number"
               value={formData.protein || ''}
               onChange={(e) => setFormData({ ...formData, protein: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 130"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
            <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Carbs</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Carbs</label>
             <input
               type="number"
               value={formData.carbs || ''}
               onChange={(e) => setFormData({ ...formData, carbs: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 200"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
            <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Fat</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Fat</label>
             <input
               type="number"
               value={formData.fat || ''}
               onChange={(e) => setFormData({ ...formData, fat: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 60"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
 
            <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Step Count</label>
+            <label className="block text-sm font-medium text-brand-dark mb-1">Step Count</label>
             <input
               type="number"
               value={formData.stepCount || ''}
               onChange={(e) => setFormData({ ...formData, stepCount: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 10,000"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             />
           </div>
         </div>
@@ -174,9 +174,9 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
             id="strengthTraining"
             checked={formData.strengthTraining}
             onChange={(e) => setFormData({ ...formData, strengthTraining: e.target.checked })}
-            className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+            className="w-4 h-4 text-brand-teal rounded focus:ring-2 focus:ring-brand-teal"
           />
-          <label htmlFor="strengthTraining" className="text-sm font-medium text-gray-700">
+          <label htmlFor="strengthTraining" className="text-sm font-medium text-brand-dark">
             Strength Training
           </label>
 
@@ -185,9 +185,9 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
             id="cardio"
             checked={formData.cardio}
             onChange={(e) => setFormData({ ...formData, cardio: e.target.checked })}
-            className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+            className="w-4 h-4 text-brand-teal rounded focus:ring-2 focus:ring-brand-teal"
           />
-          <label htmlFor="cardio" className="text-sm font-medium text-gray-700">
+          <label htmlFor="cardio" className="text-sm font-medium text-brand-dark">
             I did a run today!
           </label>
 
@@ -196,20 +196,20 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
             id="creatine"
             checked={formData.creatine}
             onChange={(e) => setFormData({ ...formData, creatine: e.target.checked })}
-            className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+            className="w-4 h-4 text-brand-teal rounded focus:ring-2 focus:ring-brand-teal"
           />
-          <label htmlFor="creatine" className="text-sm font-medium text-gray-700">
+          <label htmlFor="creatine" className="text-sm font-medium text-brand-dark">
             Creatine
           </label>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+          <label className="block text-sm font-medium text-brand-dark mb-1">Notes</label>
           <textarea
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             placeholder="Add any notes..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
             rows={3}
           />
         </div>
@@ -218,13 +218,13 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+            className="px-4 py-2 text-brand-dark bg-brand-light rounded-lg hover:bg-brand-slate hover:text-brand-light transition"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+            className="px-4 py-2 bg-brand-teal text-brand-dark rounded-lg hover:opacity-80 transition"
           >
             {editingRecord ? 'Update Metrics' : 'Save Metrics'}
           </button>

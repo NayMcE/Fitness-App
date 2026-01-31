@@ -11,15 +11,15 @@ interface StatCardProps {
 }
 
 export default function StatCard({ icon: Icon, label, value, change, trend }: StatCardProps) {
-  const trendColor = trend === 'down' ? 'text-green-600' : trend === 'up' ? 'text-red-600' : 'text-gray-600'
-  const trendBg = trend === 'down' ? 'bg-green-50' : trend === 'up' ? 'bg-red-50' : 'bg-gray-50'
+  const trendColor = trend === 'down' ? 'text-brand-teal' : trend === 'up' ? 'text-red-600' : 'text-brand-slate'
+  const trendBg = trend === 'down' ? 'bg-brand-teal bg-opacity-10' : trend === 'up' ? 'bg-red-50' : 'bg-brand-light'
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-6 border-l-4 border-brand-teal">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-gray-600 text-sm font-medium">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{value}</p>
+          <p className="text-brand-slate text-sm font-medium">{label}</p>
+          <p className="text-2xl font-bold text-brand-dark mt-2">{value}</p>
           {change !== 0 && (
             <p className={`text-sm mt-2 ${trendColor}`}>
               {change > 0 ? '+' : ''}{change.toFixed(1)} {label.includes('Weight') ? 'lbs' : ''}

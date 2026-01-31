@@ -38,12 +38,12 @@ export default function CaloriesChart({ records }: { records: DailyRecord[] }) {
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Weekly Calories Total</h2>
+      <h2 className="text-lg font-bold text-brand-dark mb-4">Weekly Calories Total</h2>
       {data.length > 0 ? (
         <>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e9edef" />
               <XAxis 
                 dataKey="week" 
                 tick={{ fontSize: 12 }}
@@ -56,24 +56,24 @@ export default function CaloriesChart({ records }: { records: DailyRecord[] }) {
               <Line 
                 type="monotone" 
                 dataKey="calories" 
-                stroke="#f59e0b" 
+                stroke="#0ac5a8" 
                 strokeWidth={2}
-                dot={{ fill: '#f59e0b', r: 5 }}
-                label={{ position: 'top', formatter: (value: number) => `${value}`, fill: '#374151', fontSize: 12 }}
+                dot={{ fill: '#0ac5a8', r: 5 }}
+                label={{ position: 'top', formatter: (value: number) => `${value}`, fill: '#2c3d5b', fontSize: 12 }}
               />
             </LineChart>
           </ResponsiveContainer>
           <div className="mt-6 grid grid-cols-1 gap-3">
             {data.map((record) => (
-              <div key={record.week} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <span className="text-sm font-medium text-gray-700">{record.week}</span>
-                <span className="text-lg font-bold text-amber-600">{record.calories} cal</span>
+              <div key={record.week} className="flex justify-between items-center p-3 bg-brand-light rounded-lg border-l-4 border-brand-teal">
+                <span className="text-sm font-medium text-brand-dark">{record.week}</span>
+                <span className="text-lg font-bold text-brand-teal">{record.calories} cal</span>
               </div>
             ))}
           </div>
         </>
       ) : (
-        <p className="text-gray-500 text-center py-8">No calorie data yet</p>
+        <p className="text-brand-slate text-center py-8">No calorie data yet</p>
       )}
     </div>
   )

@@ -33,14 +33,14 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Weight Trend {getRangeLabel()}</h2>
+        <h2 className="text-lg font-bold text-brand-dark mb-4">Weight Trend {getRangeLabel()}</h2>
         <div className="flex gap-3">
           <button
             onClick={() => setTimeRange('week')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'week'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+                ? 'bg-brand-teal text-brand-dark'
+                : 'bg-brand-light text-brand-dark hover:bg-brand-slate hover:text-brand-light'
             }`}
           >
             Week
@@ -49,8 +49,8 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
             onClick={() => setTimeRange('month')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'month'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+                ? 'bg-brand-teal text-brand-dark'
+                : 'bg-brand-light text-brand-dark hover:bg-brand-slate hover:text-brand-light'
             }`}
           >
             Month
@@ -59,8 +59,8 @@ export default function WeightChart({ records }: { records: DailyRecord[] }) {
             onClick={() => setTimeRange('all')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               timeRange === 'all'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+                ? 'bg-brand-teal text-brand-dark'
+                : 'bg-brand-light text-brand-dark hover:bg-brand-slate hover:text-brand-light'
             }`}
           >
             All Time

@@ -32,21 +32,21 @@ export default function RecentRecords({ records, onEdit, onDelete, calorieTarget
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Recent Logs</h2>
+    <div className="bg-white rounded-lg shadow p-6 border-l-4 border-brand-teal">
+      <h2 className="text-lg font-bold text-brand-dark mb-4">Recent Logs</h2>
       {records.length > 0 ? (
         <div className="space-y-3">
           {records.map((record, idx) => (
-            <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div key={idx} className="flex items-center justify-between p-4 bg-brand-light rounded-lg border-l-4 border-brand-teal">
               <div className="flex items-center gap-4 flex-1">
                 {targetsMetDaily(record) ? (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-brand-teal" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-brand-slate" />
                 )}
                 <div>
-                  <p className="font-medium text-gray-900">{record.date}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-brand-dark">{record.date}</p>
+                  <p className="text-sm text-brand-slate">
                     {record.calories} cal • {record.weight} lbs {record.strengthTraining && '• Strength Training'}
                   </p>
                 </div>
@@ -54,7 +54,7 @@ export default function RecentRecords({ records, onEdit, onDelete, calorieTarget
               <div className="flex gap-2">
                 <button
                   onClick={() => onEdit(record)}
-                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                  className="p-2 text-brand-teal hover:bg-brand-light rounded-lg transition"
                   title="Edit entry"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -72,7 +72,7 @@ export default function RecentRecords({ records, onEdit, onDelete, calorieTarget
           ))}
         </div>
       ) : (
-        <p className="text-gray-500 text-center py-8">No records yet. Start logging your metrics!</p>
+        <p className="text-brand-slate text-center py-8">No records yet. Start logging your metrics!</p>
       )}
     </div>
   )

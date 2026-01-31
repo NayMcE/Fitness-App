@@ -29,12 +29,12 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
   }
 
   return (
-    <header className="bg-white shadow">
+    <header className="bg-brand-dark shadow">
       <div className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition">
-            <Activity className="w-8 h-8 text-indigo-600" />
-            <h1 className="text-3xl font-bold text-gray-900">Macci Fit Tracker</h1>
+            <Activity className="w-8 h-8 text-brand-teal" />
+            <h1 className="text-3xl font-bold text-brand-light">Macci Fit Tracker</h1>
           </Link>
 
           <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             <div className="hidden lg:flex items-center gap-2">
               <Link
                 href="/logs"
-                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                className="flex items-center gap-2 bg-brand-slate text-brand-light px-4 py-2 rounded-lg hover:bg-brand-teal hover:text-brand-dark transition"
                 title="View all logs"
               >
                 <FileText className="w-5 h-5" />
@@ -50,14 +50,14 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
               </Link>
               <button
                 onClick={handleSettingsClick}
-                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                className="flex items-center gap-2 bg-brand-slate text-brand-light px-4 py-2 rounded-lg hover:bg-brand-teal hover:text-brand-dark transition"
                 title="Settings"
               >
                 <Settings className="w-5 h-5" />
               </button>
               <button
                 onClick={handleLogMetricsClick}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                className="flex items-center gap-2 bg-brand-teal text-brand-dark px-4 py-2 rounded-lg hover:bg-brand-teal hover:opacity-80 transition"
               >
                 <Plus className="w-5 h-5" />
                 Log Metrics
@@ -67,13 +67,13 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition lg:hidden"
+              className="p-2 hover:bg-brand-slate rounded-lg transition lg:hidden"
               title="Menu"
             >
               {menuOpen ? (
-                <X className="w-6 h-6 text-gray-900" />
+                <X className="w-6 h-6 text-brand-light" />
               ) : (
-                <Menu className="w-6 h-6 text-gray-900" />
+                <Menu className="w-6 h-6 text-brand-light" />
               )}
             </button>
           </div>
@@ -85,7 +85,7 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             <Link
               href="/logs"
               onClick={handleLogsClick}
-              className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition w-full"
+              className="flex items-center gap-2 bg-brand-slate text-brand-light px-4 py-2 rounded-lg hover:bg-brand-teal hover:text-brand-dark transition w-full"
               title="View all logs"
             >
               <FileText className="w-5 h-5" />
@@ -93,7 +93,7 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             </Link>
             <button
               onClick={handleSettingsClick}
-              className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition w-full"
+              className="flex items-center gap-2 bg-brand-slate text-brand-light px-4 py-2 rounded-lg hover:bg-brand-teal hover:text-brand-dark transition w-full"
               title="Settings"
             >
               <Settings className="w-5 h-5" />
@@ -101,7 +101,7 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             </button>
             <button
               onClick={handleLogMetricsClick}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition w-full"
+              className="flex items-center gap-2 bg-brand-teal text-brand-dark px-4 py-2 rounded-lg hover:bg-brand-teal hover:opacity-80 transition w-full"
             >
               <Plus className="w-5 h-5" />
               Log Metrics
