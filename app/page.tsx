@@ -39,10 +39,19 @@ export default function Page() {
           ...prev,
           records: Array.isArray(records) ? records : []
         }))
+      } else {
+        console.error('Failed to fetch records:', response.status)
+        const errorData = await response.json()
+        console.error('Error details:', errorData)
+        // Fallback to empty records on error
+        setData(prev => ({
+          ...prev,
+          records: []
+        }))
       }
     } catch (error) {
       console.error('Failed to fetch records:', error)
-      // Fallback to localStorage
+      // Fallback to localStorage on error
       const loaded = loadData()
       setData(loaded)
     }

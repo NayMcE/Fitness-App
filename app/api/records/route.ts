@@ -6,6 +6,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
 
+    console.log('GET /api/records - Database URL:', process.env.DATABASE_URL ? 'Set' : 'NOT SET');
+
     if (date) {
       const record = await prisma.dailyRecord.findUnique({
         where: { date },
@@ -23,8 +25,9 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('GET Error:', errorMessage);
+    console.error('Full error:', error);
     return NextResponse.json(
-      { error: errorMessage },
+      { error: errorMessage, details: String(error) },
       { status: 500 }
     );
   }
