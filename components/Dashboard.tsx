@@ -85,6 +85,8 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
         records={records.slice(0, 10)} 
         onEdit={handleEdit}
         onDelete={handleDeleteRecord}
+        calorieTarget={data.targets?.calorieTarget || 2000}
+        stepsTarget={data.targets?.stepsTarget || 10000}
       />
     </div>
   )

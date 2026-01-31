@@ -17,7 +17,6 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
     calories: 0,
     strengthTraining: false,
     cardio: false,
-    workoutMinutes: 0,
     weight: 0,
     protein: 0,
     carbs: 0,
@@ -36,7 +35,6 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
         calories: 0,
         strengthTraining: false,
         cardio: false,
-        workoutMinutes: 0,
         weight: 0,
         protein: 0,
         carbs: 0,
@@ -68,7 +66,6 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
       calories: 0,
       strengthTraining: false,
       cardio: false,
-      workoutMinutes: 0,
       weight: 0,
       protein: 0,
       carbs: 0,
@@ -155,17 +152,6 @@ export default function MetricsForm({ onSubmit, onCancel, editingRecord }: Metri
               value={formData.fat || ''}
               onChange={(e) => setFormData({ ...formData, fat: parseInt(e.target.value) || 0 })}
               placeholder="e.g., 60"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Workout Minutes</label>
-            <input
-              type="number"
-              value={formData.workoutMinutes || ''}
-              onChange={(e) => setFormData({ ...formData, workoutMinutes: parseInt(e.target.value) || 0 })}
-              placeholder="e.g., 30"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

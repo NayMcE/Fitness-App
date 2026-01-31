@@ -4,7 +4,6 @@ export interface DailyRecord {
   calories: number
   strengthTraining: boolean
   cardio: boolean
-  workoutMinutes: number
   weight: number
   protein: number
   carbs: number
@@ -14,6 +13,12 @@ export interface DailyRecord {
   notes: string
 }
 
+export interface DailyTargets {
+  calorieTarget: number
+  stepsTarget: number
+}
+
 export interface FitnessData {
   records: DailyRecord[]
+  targets?: DailyTargets
 }

@@ -1,16 +1,21 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Activity, Plus } from 'lucide-react'
+import { Activity, Plus, Settings } from 'lucide-react'
 import Dashboard from '@/components/Dashboard'
 import MetricsForm from '@/components/MetricsForm'
-import { FitnessData, DailyRecord } from '@/types'
+import TargetsSettings from '@/components/TargetsSettings'
+import { FitnessData, DailyRecord, DailyTargets } from '@/types'
 import { loadData, saveData } from '@/utils/storage'
 
 // Fitness tracker application
 export default function Page() {
-  const [data, setData] = useState<FitnessData>({ records: [] })
+  const [data, setData] = useState<FitnessData>({ 
+    records: [], 
+    targets: { calorieTarget: 2000, stepsTarget: 10000 } 
+  })
   const [showForm, setShowForm] = useState(false)
+  const [showTargets, setShowTargets] = useState(false)
   const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -32,13 +37,15 @@ export default function Page() {
     if (editingRecord) {
       // Update existing record
       setData(prev => ({
-        records: prev.records.map(r => r.date === editingRecord.date ? record : r)
+        records: prev.records.map(r => r.date === editingRecord.date ? record : r),
+        targets: prev.targets
       }))
       setEditingRecord(null)
     } else {
       // Add new record
       setData(prev => ({
-        records: [record, ...prev.records]
+        records: [record, ...prev.records],
+        targets: prev.targets
       }))
     }
     setShowForm(false)
@@ -51,8 +58,17 @@ export default function Page() {
 
   const handleDeleteRecord = (date: string) => {
     setData(prev => ({
-      records: prev.records.filter(r => r.date !== date)
+      records: prev.records.filter(r => r.date !== date),
+      targets: prev.targets
     }))
+  }
+
+  const handleSaveTargets = (targets: DailyTargets) => {
+    setData(prev => ({
+      ...prev,
+      targets
+    }))
+    setShowTargets(false)
   }
 
   const handleCloseForm = () => {
@@ -77,21 +93,41 @@ export default function Page() {
               <Activity className="w-8 h-8 text-indigo-600" />
               <h1 className="text-3xl font-bold text-gray-900">Macci Fit Tracker</h1>
             </div>
-            <button
-              onClick={() => {
-                setEditingRecord(null)
-                setShowForm(!showForm)
-              }}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-            >
-              <Plus className="w-5 h-5" />
-              Log Metrics
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setShowForm(false)
+                  setShowTargets(!showTargets)
+                }}
+                className="flex items-center gap-2 bg-gray-200 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                title="Settings"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => {
+                  setEditingRecord(null)
+                  setShowTargets(false)
+                  setShowForm(!showForm)
+                }}
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+              >
+                <Plus className="w-5 h-5" />
+                Log Metrics
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
+        {showTargets && (
+          <TargetsSettings 
+            targets={data.targets || { calorieTarget: 2000, stepsTarget: 10000 }}
+            onSave={handleSaveTargets}
+            onCancel={() => setShowTargets(false)}
+          />
+        )}
         {showForm && (
           <div className="mb-8">
             <MetricsForm 

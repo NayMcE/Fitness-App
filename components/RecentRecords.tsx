@@ -8,10 +8,18 @@ interface RecentRecordsProps {
   records: DailyRecord[]
   onEdit: (record: DailyRecord) => void
   onDelete: (date: string) => void
+  calorieTarget?: number
+  stepsTarget?: number
 }
 
-export default function RecentRecords({ records, onEdit, onDelete }: RecentRecordsProps) {
+export default function RecentRecords({ records, onEdit, onDelete, calorieTarget = 2000, stepsTarget = 10000 }: RecentRecordsProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const targetsMetDaily = (record: DailyRecord): boolean => {
+    const caloriesMet = record.calories >= calorieTarget
+    const stepsMet = record.stepCount >= stepsTarget
+    return caloriesMet && stepsMet
+  }
 
   const handleDelete = async (record: DailyRecord) => {
     if (!window.confirm(`Delete entry for ${record.date}?`)) return
@@ -31,7 +39,7 @@ export default function RecentRecords({ records, onEdit, onDelete }: RecentRecor
           {records.map((record, idx) => (
             <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-4 flex-1">
-                {record.strengthTraining   ? (
+                {targetsMetDaily(record) ? (
                   <CheckCircle className="w-5 h-5 text-green-600" />
                 ) : (
                   <Circle className="w-5 h-5 text-gray-300" />
@@ -39,7 +47,7 @@ export default function RecentRecords({ records, onEdit, onDelete }: RecentRecor
                 <div>
                   <p className="font-medium text-gray-900">{record.date}</p>
                   <p className="text-sm text-gray-600">
-                    {record.calories} cal • {record.weight} lbs {record.strengthTraining && `• ${record.workoutMinutes}min workout`}
+                    {record.calories} cal • {record.weight} lbs {record.strengthTraining && '• Strength Training'}
                   </p>
                 </div>
               </div>
