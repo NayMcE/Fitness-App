@@ -43,9 +43,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const record = await prisma.dailyRecord.create({
-      data: {
+    // Use upsert to create or update if date already exists
+    const record = await prisma.dailyRecord.upsert({
+      where: { date: body.date },
+      create: {
         date: body.date,
+        calories: body.calories,
+        strengthTraining: body.strengthTraining,
+        cardio: body.cardio,
+        weight: body.weight,
+        protein: body.protein,
+        carbs: body.carbs,
+        fat: body.fat,
+        creatine: body.creatine,
+        stepCount: body.stepCount,
+        notes: body.notes || '',
+      },
+      update: {
         calories: body.calories,
         strengthTraining: body.strengthTraining,
         cardio: body.cardio,
@@ -59,7 +73,7 @@ export async function POST(request: NextRequest) {
       },
     });
     
-    console.log('POST /api/records - Created record:', record);
+    console.log('POST /api/records - Created/Updated record:', record);
     return NextResponse.json(record, { status: 201 });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
