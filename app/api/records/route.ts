@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
+    console.log('POST /api/records - Received body:', body);
+    
     if (!body) {
       return NextResponse.json(
         { error: 'Request body is empty' },
@@ -57,6 +59,7 @@ export async function POST(request: NextRequest) {
       },
     });
     
+    console.log('POST /api/records - Created record:', record);
     return NextResponse.json(record, { status: 201 });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

@@ -51,16 +51,20 @@ export default function Page() {
   const addRecord = async (record: DailyRecord) => {
     setIsSaving(true)
     try {
+      console.log('Adding record:', record)
       if (editingRecord) {
         // Update existing record
         const recordId = editingRecord.id || editingRecord._id
+        console.log('Updating record with ID:', recordId)
         const response = await fetch(`/api/records?id=${recordId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(record)
         })
+        console.log('Update response status:', response.status)
         if (response.ok) {
           const updated = await response.json()
+          console.log('Updated record:', updated)
           setData(prev => ({
             records: prev.records.map(r => (r.id === updated.id || r._id === updated.id) ? updated : r),
             targets: prev.targets
@@ -69,17 +73,23 @@ export default function Page() {
         }
       } else {
         // Add new record
+        console.log('Creating new record')
         const response = await fetch('/api/records', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(record)
         })
+        console.log('Create response status:', response.status)
         if (response.ok) {
           const created = await response.json()
+          console.log('Created record:', created)
           setData(prev => ({
             records: [created, ...prev.records],
             targets: prev.targets
           }))
+        } else {
+          const errorData = await response.json()
+          console.error('API error:', errorData)
         }
       }
       setShowForm(false)
