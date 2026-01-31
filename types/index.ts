@@ -1,4 +1,5 @@
 export interface DailyRecord {
+  id?: string
   _id?: string
   date: string
   calories: number

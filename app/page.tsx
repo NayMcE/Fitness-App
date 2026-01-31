@@ -18,37 +18,77 @@ export default function Page() {
   const [showTargets, setShowTargets] = useState(false)
   const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
-  // Load data from localStorage on mount
+  // Load data from database on mount
   useEffect(() => {
+    fetchRecords()
     const loaded = loadData()
-    setData(loaded)
+    if (loaded.targets) {
+      setData(prev => ({ ...prev, targets: loaded.targets }))
+    }
     setIsLoaded(true)
   }, [])
 
-  // Save data to localStorage whenever it changes
-  useEffect(() => {
-    if (isLoaded) {
-      saveData(data)
+  const fetchRecords = async () => {
+    try {
+      const response = await fetch('/api/records')
+      if (response.ok) {
+        const records = await response.json()
+        setData(prev => ({
+          ...prev,
+          records: Array.isArray(records) ? records : []
+        }))
+      }
+    } catch (error) {
+      console.error('Failed to fetch records:', error)
+      // Fallback to localStorage
+      const loaded = loadData()
+      setData(loaded)
     }
-  }, [data, isLoaded])
+  }
 
-  const addRecord = (record: DailyRecord) => {
-    if (editingRecord) {
-      // Update existing record
-      setData(prev => ({
-        records: prev.records.map(r => r.date === editingRecord.date ? record : r),
-        targets: prev.targets
-      }))
-      setEditingRecord(null)
-    } else {
-      // Add new record
-      setData(prev => ({
-        records: [record, ...prev.records],
-        targets: prev.targets
-      }))
+  const addRecord = async (record: DailyRecord) => {
+    setIsSaving(true)
+    try {
+      if (editingRecord) {
+        // Update existing record
+        const recordId = editingRecord.id || editingRecord._id
+        const response = await fetch(`/api/records?id=${recordId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        })
+        if (response.ok) {
+          const updated = await response.json()
+          setData(prev => ({
+            records: prev.records.map(r => (r.id === updated.id || r._id === updated.id) ? updated : r),
+            targets: prev.targets
+          }))
+          setEditingRecord(null)
+        }
+      } else {
+        // Add new record
+        const response = await fetch('/api/records', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        })
+        if (response.ok) {
+          const created = await response.json()
+          setData(prev => ({
+            records: [created, ...prev.records],
+            targets: prev.targets
+          }))
+        }
+      }
+      setShowForm(false)
+    } catch (error) {
+      console.error('Failed to save record:', error)
+      alert('Failed to save record. Please try again.')
+    } finally {
+      setIsSaving(false)
     }
-    setShowForm(false)
   }
 
   const handleEditRecord = (record: DailyRecord) => {
@@ -56,11 +96,26 @@ export default function Page() {
     setShowForm(true)
   }
 
-  const handleDeleteRecord = (date: string) => {
-    setData(prev => ({
-      records: prev.records.filter(r => r.date !== date),
-      targets: prev.targets
-    }))
+  const handleDeleteRecord = async (date: string) => {
+    try {
+      const recordToDelete = data.records.find(r => r.date === date)
+      if (!recordToDelete) return
+      
+      const recordId = recordToDelete.id || recordToDelete._id
+      const response = await fetch(`/api/records?id=${recordId}`, {
+        method: 'DELETE'
+      })
+      
+      if (response.ok) {
+        setData(prev => ({
+          records: prev.records.filter(r => r.date !== date),
+          targets: prev.targets
+        }))
+      }
+    } catch (error) {
+      console.error('Failed to delete record:', error)
+      alert('Failed to delete record. Please try again.')
+    }
   }
 
   const handleSaveTargets = (targets: DailyTargets) => {
