@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Menu, X, FileText, Settings, Plus } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
+import { Menu, X, FileText, Settings, Plus, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { data: session } = useSession()
 
   const handleLogsClick = () => {
     onLogsClick?.()
@@ -27,6 +29,11 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
   const handleLogMetricsClick = () => {
     onLogMetricsClick?.()
     setMenuOpen(false)
+  }
+
+  const handleLogout = async () => {
+    setMenuOpen(false)
+    await signOut({ redirect: true, callbackUrl: '/login' })
   }
 
   return (
@@ -109,6 +116,14 @@ export default function Header({ onLogsClick, onSettingsClick, onLogMetricsClick
             >
               <Plus className="w-5 h-5" />
               Log Metrics
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition w-full"
+              title="Sign out"
+            >
+              <LogOut className="w-5 h-5" />
+              Sign Out
             </button>
           </div>
         )}

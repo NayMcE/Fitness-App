@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Dashboard from '@/components/Dashboard'
 import MetricsForm from '@/components/MetricsForm'
 import TargetsSettings from '@/components/TargetsSettings'
@@ -10,6 +12,9 @@ import { loadData, saveData } from '@/utils/storage'
 
 // Fitness tracker application
 export default function Page() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  
   const [data, setData] = useState<FitnessData>({ 
     records: [], 
     targets: { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 } 
@@ -19,6 +24,13 @@ export default function Page() {
   const [editingRecord, setEditingRecord] = useState<DailyRecord | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login')
+    }
+  }, [status, router])
 
   // Load data from database on mount
   useEffect(() => {
