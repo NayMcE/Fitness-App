@@ -10,9 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  email           String    @unique
+  password        String
+  name            String?
+  records         DailyRecord[]
+  targets         DailyTargets?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
 model DailyRecord {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  date            String    @unique
+  userId          String    @db.ObjectId
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date            String
   calories        Int
   strengthTraining Boolean
   cardio          Boolean
@@ -25,10 +38,14 @@ model DailyRecord {
   notes           String    @default("")
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, date])
 }
 
 model DailyTargets {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String   @unique @db.ObjectId
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   calorieTarget       Int
   stepsTarget         Int
   weeklyStepsTarget   Int
