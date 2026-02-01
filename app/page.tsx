@@ -22,12 +22,23 @@ export default function Page() {
 
   // Load data from database on mount
   useEffect(() => {
-    fetchRecords()
-    const loaded = loadData()
-    if (loaded.targets) {
-      setData(prev => ({ ...prev, targets: loaded.targets }))
+    const init = async () => {
+      // Check health first
+      try {
+        const healthRes = await fetch('/api/health')
+        console.log('Health check response:', healthRes.status)
+      } catch (e) {
+        console.error('Health check failed:', e)
+      }
+      
+      await fetchRecords()
+      const loaded = loadData()
+      if (loaded.targets) {
+        setData(prev => ({ ...prev, targets: loaded.targets }))
+      }
+      setIsLoaded(true)
     }
-    setIsLoaded(true)
+    init()
   }, [])
 
   const fetchRecords = async () => {
