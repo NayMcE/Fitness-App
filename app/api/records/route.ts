@@ -1,16 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
 
-    console.log('GET /api/records - Database URL:', process.env.DATABASE_URL ? 'Set' : 'NOT SET');
-
     if (date) {
       const record = await prisma.dailyRecord.findUnique({
-        where: { date },
+        where: { 
+          userId_date: {
+            userId: session.user.id,
+            date,
+          }
+        },
       });
       if (record) {
         return NextResponse.json(record);
@@ -19,6 +33,7 @@ export async function GET(request: NextRequest) {
     }
 
     const records = await prisma.dailyRecord.findMany({
+      where: { userId: session.user.id },
       orderBy: { date: 'desc' },
     });
     return NextResponse.json(records);
@@ -35,10 +50,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const session = await getServerSession(authOptions);
     
-    console.log('POST /api/records - Received body:', body);
-    console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'NOT SET');
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
     
     if (!body) {
       return NextResponse.json(
@@ -47,10 +68,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use upsert to create or update if date already exists
+    // Use upsert to create or update if date already exists for this user
     const record = await prisma.dailyRecord.upsert({
-      where: { date: body.date },
+      where: { 
+        userId_date: {
+          userId: session.user.id,
+          date: body.date,
+        }
+      },
       create: {
+        userId: session.user.id,
         date: body.date,
         calories: body.calories,
         strengthTraining: body.strengthTraining,
@@ -77,7 +104,6 @@ export async function POST(request: NextRequest) {
       },
     });
     
-    console.log('POST /api/records - Created/Updated record:', record);
     return NextResponse.json(record, { status: 201 });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -92,6 +118,15 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
@@ -119,6 +154,15 @@ export async function DELETE(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const body = await request.json();
