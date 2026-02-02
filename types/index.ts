@@ -17,6 +17,7 @@ export interface DailyRecord {
 export interface DailyTargets {
   calorieTarget: number
   stepsTarget: number
+  weeklyCalorieTarget?: number
   weeklyStepsTarget: number
 }
 

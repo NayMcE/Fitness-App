@@ -15,7 +15,7 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (formData.calorieTarget > 0 && formData.stepsTarget > 0 && formData.weeklyStepsTarget > 0) {
+    if (formData.calorieTarget > 0 && formData.stepsTarget > 0 && formData.weeklyStepsTarget > 0 && formData.weeklyCalorieTarget && formData.weeklyCalorieTarget > 0) {
       onSave(formData)
     } else {
       alert('Please enter valid target values')
@@ -68,18 +68,57 @@ export default function TargetsSettings({ targets, onSave, onCancel }: TargetsSe
 
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-brand-dark mb-4">Weekly Targets</h3>
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-brand-dark mb-2">
+                Weekly Calorie Target
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  value={formData.weeklyCalorieTarget || formData.calorieTarget * 7}
+                  onChange={(e) => setFormData({ ...formData, weeklyCalorieTarget: parseInt(e.target.value) || 0 })}
+                  placeholder="e.g., 14000"
+                  className="flex-1 px-4 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, weeklyCalorieTarget: formData.calorieTarget * 7 })}
+                  className="px-3 py-2 bg-brand-light text-brand-dark rounded-lg hover:bg-brand-teal transition text-sm font-medium whitespace-nowrap"
+                  title="Auto-calculate from daily target"
+                >
+                  Auto
+                </button>
+              </div>
+              <p className="text-xs text-brand-slate mt-1">
+                Daily target × 7 = {formData.calorieTarget * 7}
+              </p>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">
                 Weekly Steps Target
               </label>
-              <input
-                type="number"
-                value={formData.weeklyStepsTarget}
-                onChange={(e) => setFormData({ ...formData, weeklyStepsTarget: parseInt(e.target.value) || 0 })}
-                placeholder="e.g., 70000"
-                className="w-full px-4 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  value={formData.weeklyStepsTarget}
+                  onChange={(e) => setFormData({ ...formData, weeklyStepsTarget: parseInt(e.target.value) || 0 })}
+                  placeholder="e.g., 70000"
+                  className="flex-1 px-4 py-2 border border-brand-light rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, weeklyStepsTarget: formData.stepsTarget * 7 })}
+                  className="px-3 py-2 bg-brand-light text-brand-dark rounded-lg hover:bg-brand-teal transition text-sm font-medium whitespace-nowrap"
+                  title="Auto-calculate from daily target"
+                >
+                  Auto
+                </button>
+              </div>
+              <p className="text-xs text-brand-slate mt-1">
+                Daily target × 7 = {formData.stepsTarget * 7}
+              </p>
             </div>
           </div>
         </div>

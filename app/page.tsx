@@ -17,7 +17,7 @@ export default function Page() {
   
   const [data, setData] = useState<FitnessData>({ 
     records: [], 
-    targets: { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 } 
+    targets: { calorieTarget: 2000, stepsTarget: 10000, weeklyCalorieTarget: 14000, weeklyStepsTarget: 70000 } 
   })
   const [showForm, setShowForm] = useState(false)
   const [showTargets, setShowTargets] = useState(false)
@@ -166,6 +166,7 @@ export default function Page() {
       ...prev,
       targets
     }))
+    saveData({ records: data.records, targets })
     setShowTargets(false)
   }
 
