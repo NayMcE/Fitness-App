@@ -22,7 +22,7 @@ export default function Dashboard({ data, onEditRecord, onDeleteRecord }: Dashbo
   const creatineDays = getWeeklyCreatineDays(records)
   const weeklyCalories = getWeeklyCalories(records)
   const weeklySteps = getWeeklySteps(records)
-  const weeklyCalorieGoal = 14700 // 2000 cal/day × 7 days
+  const weeklyCalorieGoal = data.targets?.weeklyCalorieTarget || 14000 // 2000 cal/day × 7 days
   const weeklyStepsGoal = data.targets?.weeklyStepsTarget || 70000 // 10000 steps/day × 7 days
 
   const handleEdit = (record: DailyRecord) => {
