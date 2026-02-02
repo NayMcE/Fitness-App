@@ -44,10 +44,7 @@ export default function Page() {
       }
       
       await fetchRecords()
-      const loaded = loadData()
-      if (loaded.targets) {
-        setData(prev => ({ ...prev, targets: loaded.targets }))
-      }
+      await fetchTargets()
       setIsLoaded(true)
     }
     init()
@@ -74,9 +71,38 @@ export default function Page() {
       }
     } catch (error) {
       console.error('Failed to fetch records:', error)
+      // Fallback to empty records on error
+      setData(prev => ({
+        ...prev,
+        records: []
+      }))
+    }
+  }
+
+  const fetchTargets = async () => {
+    try {
+      const response = await fetch('/api/targets')
+      if (response.ok) {
+        const targets = await response.json()
+        setData(prev => ({
+          ...prev,
+          targets
+        }))
+      } else {
+        console.error('Failed to fetch targets:', response.status)
+        // Fallback to localStorage
+        const loaded = loadData()
+        if (loaded.targets) {
+          setData(prev => ({ ...prev, targets: loaded.targets }))
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch targets:', error)
       // Fallback to localStorage on error
       const loaded = loadData()
-      setData(loaded)
+      if (loaded.targets) {
+        setData(prev => ({ ...prev, targets: loaded.targets }))
+      }
     }
   }
 
@@ -161,13 +187,31 @@ export default function Page() {
     }
   }
 
-  const handleSaveTargets = (targets: DailyTargets) => {
-    setData(prev => ({
-      ...prev,
-      targets
-    }))
-    saveData({ records: data.records, targets })
-    setShowTargets(false)
+  const handleSaveTargets = async (targets: DailyTargets) => {
+    try {
+      const response = await fetch('/api/targets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(targets),
+      })
+
+      if (response.ok) {
+        const savedTargets = await response.json()
+        setData(prev => ({
+          ...prev,
+          targets: savedTargets
+        }))
+        // Also save to localStorage as fallback
+        saveData({ records: data.records, targets: savedTargets })
+        setShowTargets(false)
+      } else {
+        console.error('Failed to save targets:', response.status)
+        alert('Failed to save targets. Please try again.')
+      }
+    } catch (error) {
+      console.error('Failed to save targets:', error)
+      alert('Failed to save targets. Please try again.')
+    }
   }
 
   const handleCloseForm = () => {
