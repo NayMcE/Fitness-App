@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { DailyRecord, DailyTargets } from '@/types'
 import { CheckCircle, Circle, Edit2, Trash2 } from 'lucide-react'
-import { loadData, saveData } from '@/utils/storage'
 import MetricsForm from '@/components/MetricsForm'
 import TargetsSettings from '@/components/TargetsSettings'
 import Header from '@/components/Header'
@@ -17,29 +16,72 @@ export default function LogsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Load data from localStorage on mount
+  // Load data from database on mount
   useEffect(() => {
-    const data = loadData()
-    setRecords(data.records)
-    setTargets(data.targets || { calorieTarget: 2000, stepsTarget: 10000, weeklyStepsTarget: 70000 })
-    setIsLoaded(true)
+    const init = async () => {
+      await fetchRecords()
+      await fetchTargets()
+      setIsLoaded(true)
+    }
+    init()
   }, [])
 
-  // Save data to localStorage whenever it changes
-  useEffect(() => {
-    if (isLoaded) {
-      saveData({ records, targets })
+  const fetchRecords = async () => {
+    try {
+      const response = await fetch('/api/records')
+      if (response.ok) {
+        const data = await response.json()
+        setRecords(Array.isArray(data) ? data : [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch records:', error)
     }
-  }, [records, targets, isLoaded])
+  }
 
-  const addRecord = (record: DailyRecord) => {
-    if (editingRecord) {
-      setRecords(prev => prev.map(r => r.date === editingRecord.date ? record : r))
-      setEditingRecord(null)
-    } else {
-      setRecords(prev => [record, ...prev])
+  const fetchTargets = async () => {
+    try {
+      const response = await fetch('/api/targets')
+      if (response.ok) {
+        const data = await response.json()
+        setTargets(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch targets:', error)
     }
-    setShowForm(false)
+  }
+
+  const addRecord = async (record: DailyRecord) => {
+    try {
+      if (editingRecord) {
+        // Update existing record
+        const recordId = editingRecord.id || editingRecord._id
+        const response = await fetch(`/api/records?id=${recordId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        })
+        if (response.ok) {
+          const updated = await response.json()
+          setRecords(prev => prev.map(r => (r.id === updated.id || r._id === updated.id) ? updated : r))
+          setEditingRecord(null)
+        }
+      } else {
+        // Add new record
+        const response = await fetch('/api/records', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        })
+        if (response.ok) {
+          const created = await response.json()
+          setRecords(prev => [created, ...prev])
+        }
+      }
+      setShowForm(false)
+    } catch (error) {
+      console.error('Failed to save record:', error)
+      alert('Failed to save record. Please try again.')
+    }
   }
 
   const handleEditRecord = (record: DailyRecord) => {
@@ -47,13 +89,36 @@ export default function LogsPage() {
     setShowForm(true)
   }
 
-  const handleDeleteRecord = (date: string) => {
-    setRecords(prev => prev.filter(r => r.date !== date))
+  const handleDeleteRecord = async (recordId: string) => {
+    try {
+      const response = await fetch(`/api/records?id=${recordId}`, {
+        method: 'DELETE'
+      })
+      if (response.ok) {
+        setRecords(prev => prev.filter(r => (r.id || r._id) !== recordId))
+      }
+    } catch (error) {
+      console.error('Failed to delete record:', error)
+      alert('Failed to delete record. Please try again.')
+    }
   }
 
-  const handleSaveTargets = (newTargets: DailyTargets) => {
-    setTargets(newTargets)
-    setShowTargets(false)
+  const handleSaveTargets = async (newTargets: DailyTargets) => {
+    try {
+      const response = await fetch('/api/targets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTargets)
+      })
+      if (response.ok) {
+        const saved = await response.json()
+        setTargets(saved)
+        setShowTargets(false)
+      }
+    } catch (error) {
+      console.error('Failed to save targets:', error)
+      alert('Failed to save targets. Please try again.')
+    }
   }
 
   const handleCloseForm = () => {
@@ -69,9 +134,11 @@ export default function LogsPage() {
 
   const handleDelete = async (record: DailyRecord) => {
     if (!window.confirm(`Delete entry for ${record.date}?`)) return
-    setDeletingId(record.date)
+    const recordId = record.id || record._id || ''
+    if (!recordId) return
+    setDeletingId(recordId)
     try {
-      await handleDeleteRecord(record.date)
+      await handleDeleteRecord(recordId)
     } finally {
       setDeletingId(null)
     }
@@ -150,7 +217,7 @@ export default function LogsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(record)}
-                      disabled={deletingId === record.date}
+                      disabled={deletingId === (record.id || record._id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
                       title="Delete entry"
                     >
